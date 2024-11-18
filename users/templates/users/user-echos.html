@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+  <section class="profile-section py-5">
+    <div class="container col-lg-6">
+      <div class="bg-beige p-4 rounded shadow-sm">
+
+        <div class="row">
+          <div class="col-md-4 text-center">
+            <img src="{{ user.profile.avatar.url }}" alt="{{ profile.username }}'s Avatar" class="rounded-circle" width="150" height="150">
+          </div>
+
+          <div class="col-md-8">
+            <h2>{{ profile.username }}</h2>
+            <p><strong>Full Name:</strong> {{ profile.first_name }} {{ profile.last_name }}</p>
+            <p><strong>Email:</strong> {{ profile.email }}</p>
+          </div>
+        </div>
+
+        <div class="row mt-4">
+          <div class="col-12">
+            <h4>Bio:</h4>
+            <p>{{ profile.profile.bio|default:"No bio available" }}</p>
+          </div>
+        </div>
+
+        {% if user == profile %}
+          <div class="mt-4 text-center">
+            <a href="{% url 'users:edit-user' profile.username %}" class="btn btn-secondary">Edit Profile</a>
+          </div>
+        {% endif %}
+
+      </div>
+
+      <div class="echos-list mt-4">
+        <h4>{{ profile.username }}'s echos:</h4>
+        {% if echos %}
+          {% for echo in echos %}
+            <div class="post-card mb-4">
+              <div class="d-flex align-items-center">
+                <a href="{% url 'users:user-profile' echo.user.username %}">
+                  <img src="{{ echo.user.profile.avatar.url }}" alt="Avatar" class="rounded-circle" width="40" height="40">
+                </a>
+                <h6 class="fw-bold ms-2">
+                  <a href="{% url 'users:user-profile' echo.user.username %}" class="text-dark">{{ echo.user.username }}</a>
+                </h6>
+                <small class="text-muted ms-auto">{{ echo.created_at|timesince }} ago</small>
+              </div>
+
+              <p>{{ echo.content|truncatewords:20 }}</p>
+
+              <div class="post-actions d-flex">
+                <a class="btn btn-sm" href="{% url 'echos:echo-detail' echo.id %}"><i class="fa-solid fa-eye"></i></a>
+                <a href="{% url 'echos:edit-echo' echo.id %}" class="btn btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+                <a href="{% url 'echos:delete-echo' echo.id %}" class="btn btn-sm"><i class="fa-solid fa-eraser"></i></a>
+                <a href="{% url 'echos:add-wave' echo.id %}" class="btn btn-sm"><i class="fa-solid fa-water"></i></a>
+                <span class="ms-2 text-muted">{{ echo.waves.count }} waves</span>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <p>No echos yet!</p>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+{% endblock %}

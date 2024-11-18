@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Comentarios para "{{ echo.content }}"{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h2 class="text-dark" style="color: #494c4b;">Comentarios para "<span class="text-muted">{{ echo.content|truncatechars:50 }}</span>"</h2>
+    </div>
+    <div class="text-center mb-4">
+        <h5>Publicado por: {{ echo.user.username }}</h5>
+    </div>
+    
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            {% if waves %}
+                <ul class="list-group list-group-flush">
+                    {% for wave in waves %}
+                        <li class="list-group-item mb-3 shadow-sm border-0 rounded">
+                            <div class="d-flex justify-content-between">
+                                <span class="fw-bold text-primary">{{ wave.user.username }}</span>
+                                <small class="text-muted">{{ wave.created_at|date:"d M Y, H:i" }}</small>
+                            </div>
+                            <p class="mt-2" style="color: #494c4b;">{{ wave.content }}</p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <div class="alert alert-info text-center">
+                    No hay comentarios para este echo.
+                </div>
+            {% endif %}
+
+            <div class="text-center mt-4">
+                <a href="{% url 'echos:echo-detail' echo.pk %}" class="btn btn-outline-secondary rounded-pill">Volver al Echo</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

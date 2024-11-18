@@ -1,0 +1,7 @@
+<div class="container">
+  <form method="post" action="{% url 'echos:add-echo' %}">
+      {% csrf_token %}
+      {{ form }}
+      <input type="submit" value="Add echo" class="btn btn-secondary mt-2">
+  </form>
+</div>

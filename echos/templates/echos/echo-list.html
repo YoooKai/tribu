@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="post-input mb-4">
+                <h5 class="text-dark">Create a New Echo</h5>
+                {% include 'echos/add-echo.html' %}
+            </div>
+
+            {% if echos %}
+    {% for echo in echos %}
+    <div class="post-card">
+        <div class="d-flex align-items-center">
+            <a href="{% url 'users:user-profile' echo.user.username %}">
+                <img src="{{ echo.user.profile.avatar.url }}" alt="Avatar" class="rounded-circle" width="40" height="40">
+            </a>
+            <h6 class="fw-bold ms-2">
+                <a href="{% url 'users:user-profile' echo.user.username %}" class="text-dark">{{ echo.user.username }}</a>
+            </h6>
+            <small class="text-muted ms-auto">{{ echo.created_at|timesince }} ago</small>
+        </div>
+
+        <p>{{ echo.content|truncatewords:20 }}</p>
+
+        <div class="post-actions d-flex">
+            <a class="btn btn-sm " href="{% url 'echos:echo-detail' echo.id %}"><i class="fa-solid fa-eye"></i></a>
+            <a href="{% url 'echos:edit-echo' echo.id %}" class="btn btn-sm "><i class="fa-solid fa-pen-to-square"></i></a>
+            <a href="{% url 'echos:delete-echo' echo.id %}" class="btn btn-sm "><i class="fa-solid fa-eraser"></i></a>
+            <a href="{% url 'echos:add-wave' echo.id %}" class="btn btn-sm "><i class="fa-solid fa-water"></i></a>
+            <span class="ms-2 text-muted">{{ echo.waves.count }} waves</span>
+        </div>
+    </div>
+    {% endfor %}
+            {% else %}
+                <p>No availible echos.</p>
+            {% endif %}
+        </div>
+
+        <div class="col-md-4">
+            <div class="sidebar mb-4">
+                <a href="{% url 'users:user-list' %}" class="h5 d-inline me-2">User List</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
